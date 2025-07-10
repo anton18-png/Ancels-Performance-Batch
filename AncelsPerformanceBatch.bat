@@ -1,4 +1,6 @@
 @echo off
+mode con cols=160 lines=50
+title Ancels Performance Batch Powered By Anton 18 PNG Version 7
 
 :: Version #
 Set Version=7.0
@@ -14,27 +16,6 @@ echo Ancel's Performance Batch Log >APB_Log.txt
 
 :: Enable ANSI Escape Sequences
 reg add "HKCU\CONSOLE" /v "VirtualTerminalLevel" /t REG_DWORD /d "1" /f >> APB_Log.txt
-
-set z=[7m
-set i=[1m
-set q=[0m
-echo %z%Do you want to Create a Restore Point?%q%
-echo.
-echo %i%Yes = 1%q%
-echo.
-echo %i%No = 2%q%
-echo.
-set choice=
-set /p choice=
-if not '%choice%'=='' set choice=%choice:~0,1%
-if '%choice%'=='1' goto RestorePoint
-if '%choice%'=='2' goto Continue
-
-:RestorePoint
-:: Creating Restore Point
-echo Creating Restore Point
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" /v "SystemRestorePointCreationFrequency" /t REG_DWORD /d "0" /f >> APB_Log.txt
-powershell -ExecutionPolicy Bypass -Command "Checkpoint-Computer -Description 'Ancels Performance Batch' -RestorePointType 'MODIFY_SETTINGS'" >> APB_Log.txt
 
 :Continue
 cls
@@ -70,6 +51,7 @@ if '%errorlevel%' NEQ '0' (
 
 :: Main Menu
 :Menu
+mode con cols=160 lines=50
 chcp 65001 >nul 2>&1
 cls
 set c=[93m
@@ -89,6 +71,9 @@ echo     %w%██%y%%c%╔══%t%%w%██%y%%c%║%t%%w%██%y%%c%║╚%t
 echo     %w%██%y%%c%║%t%  %w%██%y%%c%║%t%%w%██%y%%c%║ ╚%t%%w%████%y%%c%║╚%t%%w%██████%y%%c%╗%t%%w%███████%y%%c%╗%t%%w%███████%y%%c%╗%t%%w%███████%y%%c%║%t%       %w%██%y%%c%║   ╚%t%%w%███%y%%c%╔%t%%w%███%y%%c%╔╝%t%%w%███████%y%%c%╗%t%%w%██%y%%c%║%t%  %w%██%y%%c%║%t%%w%██%y%%c%║%t%  %w%██%y%%c%╗%t%%w%███████%y%%c%╗%t%%w%██%y%%c%║%t%  %w%██%y%%c%║%t%
 echo     %c%╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝╚══════╝╚══════╝╚══════╝       ╚═╝    ╚══╝╚══╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝%t%                                                                                                                                                        
 echo                                                   %c%Created By: ancel_%t%     
+echo.
+echo                                                   %c%Modified By: Anton18-PNG%t%
+echo.
 echo                                                      %c%%u%Version: %Version%%q%%t%
 echo.
 echo %w%════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════%y%
@@ -101,7 +86,14 @@ echo.
 echo                           %w%[%y% %c%%u%3%q%%t% %w%]%y% %c%Disable Telemetry%t%                         %w%[%y% %c%%u%4%q% %t%%w%]%y% %c%Network%t%
 echo.
 echo.
-echo                           %w%[%y% %c%%u%5%q%%t% %w%]%y% %c%Debloat Windows%t%                           %w%[%y% %c%%u%6%q%%t% %w%]%y% %c%Other%t%
+echo                           %w%[%y% %c%%u%5%q%%t% %w%]%y% %c%Debloat Windows%t%                           %w%[%y% %c%%u%6%q%%t% %w%]%y% %c%Restore Point%t%
+echo.
+echo.
+echo                           %w%[%y% %c%%u%7%q%%t% %w%]%y% %c%Other%t%                                     %w%[%y% %c%%u%8%q%%t% %w%]%y% %c%Exit%t%
+echo.
+echo.
+echo.
+echo %w%════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════%y%
 set choice=
 set /p choice=
 if not '%choice%'=='' set choice=%choice:~0,1%
@@ -110,7 +102,32 @@ if '%choice%'=='2' goto KBMOptimizations
 if '%choice%'=='3' goto DisableTelemetry
 if '%choice%'=='4' goto Network
 if '%choice%'=='5' goto DebloatWindows
-if '%choice%'=='6' goto Other
+if '%choice%'=='6' goto MainRestorePoint
+if '%choice%'=='7' goto Other
+if '%choice%'=='8' exit
+
+:MainRestorePoint
+cls
+set z=[7m
+set i=[1m
+set q=[0m
+echo %z%Do you want to Create a Restore Point?%q%
+echo.
+echo %i%Yes = 1%q%
+echo.
+echo %i%No = 2%q%
+echo.
+set choice=
+set /p choice=
+if not '%choice%'=='' set choice=%choice:~0,1%
+if '%choice%'=='1' goto RestorePoint
+if '%choice%'=='2' goto Menu
+
+:RestorePoint
+:: Creating Restore Point
+echo Creating Restore Point
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" /v "SystemRestorePointCreationFrequency" /t REG_DWORD /d "0" /f >> APB_Log.txt
+powershell -ExecutionPolicy Bypass -Command "Checkpoint-Computer -Description 'Ancels Performance Batch' -RestorePointType 'MODIFY_SETTINGS'" >> APB_Log.txt
 
 :PerformanceOptimizations
 cls
@@ -711,6 +728,80 @@ reg add "HKLM\SYSTEM\ResourcePolicyStore\ResourceSets\Policies\Memory\NoCap" /v 
 reg add "HKLM\SYSTEM\ResourcePolicyStore\ResourceSets\Policies\Memory\NoCap" /v "CommitTarget" /t REG_DWORD /d "4294967295" /f >> APB_Log.txt
 timeout /t 1 /nobreak > NUL
 
+:: Speed up opening folders
+echo Speed up opening folders
+Reg.exe add "HKCU\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell" /v "FolderType" /t REG_SZ /d "NotSpecified" /f >> APB_Log.txt
+timeout /t 1 /nobreak > NUL
+
+::Other Tweaks For DirectX
+echo Other Tweaks For DirectX
+::DirectX 11 & 12 Mods
+Reg.exe add "HKLM\SOFTWARE\Microsoft\DirectX" /v "D3D12_ENABLE_UNSAFE_COMMAND_BUFFER_REUSE" /t REG_DWORD /d "1" /f >> APB_Log.txt
+Reg.exe add "HKLM\SOFTWARE\Microsoft\DirectX" /v "D3D12_ENABLE_RUNTIME_DRIVER_OPTIMIZATIONS" /t REG_DWORD /d "1" /f >> APB_Log.txt
+Reg.exe add "HKLM\SOFTWARE\Microsoft\DirectX" /v "D3D12_RESOURCE_ALIGNMENT" /t REG_DWORD /d "1" /f >> APB_Log.txt
+Reg.exe add "HKLM\SOFTWARE\Microsoft\DirectX" /v "D3D11_MULTITHREADED" /t REG_DWORD /d "1" /f >> APB_Log.txt
+Reg.exe add "HKLM\SOFTWARE\Microsoft\DirectX" /v "D3D12_MULTITHREADED" /t REG_DWORD /d "1" /f >> APB_Log.txt
+Reg.exe add "HKLM\SOFTWARE\Microsoft\DirectX" /v "D3D11_DEFERRED_CONTEXTS" /t REG_DWORD /d "1" /f >> APB_Log.txt
+Reg.exe add "HKLM\SOFTWARE\Microsoft\DirectX" /v "D3D12_DEFERRED_CONTEXTS" /t REG_DWORD /d "1" /f >> APB_Log.txt
+Reg.exe add "HKLM\SOFTWARE\Microsoft\DirectX" /v "D3D11_ALLOW_TILING" /t REG_DWORD /d "1" /f >> APB_Log.txt
+Reg.exe add "HKLM\SOFTWARE\Microsoft\DirectX" /v "D3D11_ENABLE_DYNAMIC_CODEGEN" /t REG_DWORD /d "1" /f >> APB_Log.txt
+Reg.exe add "HKLM\SOFTWARE\Microsoft\DirectX" /v "D3D12_ALLOW_TILING" /t REG_DWORD /d "1" /f >> APB_Log.txt
+Reg.exe add "HKLM\SOFTWARE\Microsoft\DirectX" /v "D3D12_CPU_PAGE_TABLE_ENABLED" /t REG_DWORD /d "1" /f >> APB_Log.txt
+Reg.exe add "HKLM\SOFTWARE\Microsoft\DirectX" /v "D3D12_HEAP_SERIALIZATION_ENABLED" /t REG_DWORD /d "1" /f >> APB_Log.txt
+Reg.exe add "HKLM\SOFTWARE\Microsoft\DirectX" /v "D3D12_MAP_HEAP_ALLOCATIONS" /t REG_DWORD /d "1" /f >> APB_Log.txt
+Reg.exe add "HKLM\SOFTWARE\Microsoft\DirectX" /v "D3D12_RESIDENCY_MANAGEMENT_ENABLED" /t REG_DWORD /d "1" /f >> APB_Log.txt
+
+::Включить аппаратное ускорение обработки поверхностей (DDSCAPS)
+reg add "HKLM\SOFTWARE\Microsoft\DirectDraw" /v "DisableDDSCAPSInDDSD" /t reg_DWORD /d "0" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Wow6432Node\Microsoft\DirectDraw" /v "DisableDDSCAPSInDDSD" /t reg_DWORD /d "0" /f >> APB_Log.txt
+
+::Включить аппаратное ускорение DirectDraw
+reg add "HKLM\SOFTWARE\Microsoft\DirectDraw" /v "EmulationOnly" /t reg_DWORD /d "0" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Wow6432Node\Microsoft\DirectDraw" /v "EmulationOnly" /t reg_DWORD /d "0" /f >> APB_Log.txt
+
+::Включить аппаратное ускорение для Midi
+reg add "HKLM\SOFTWARE\Microsoft\DirectMusic" /v "DisableHWAcceleration" /t reg_DWORD /d "0" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Wow6432Node\Microsoft\DirectMusic" /v "DisableHWAcceleration" /t reg_DWORD /d "0" /f >> APB_Log.txt
+
+::Включить аппаратное ускорение для отрисовки точечных объектов
+reg add "HKLM\SOFTWARE\Microsoft\DirectDraw" /v "EmulatePointSprites" /t reg_DWORD /d "0" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Wow6432Node\Microsoft\DirectDraw" /v "EmulatePointSprites" /t reg_DWORD /d "0" /f >> APB_Log.txt
+
+::Включить аппаратные средства растеризации
+reg add "HKLM\SOFTWARE\Microsoft\Direct3D\Drivers" /v "ForceRgbRasterizer" /t reg_DWORD /d "0" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Wow6432Node\Microsoft\Direct3D\Drivers" /v "ForceRgbRasterizer" /t reg_DWORD /d "0" /f >> APB_Log.txt
+
+::Включить обработку stateblocks видеодрайвером
+reg add "HKLM\SOFTWARE\Microsoft\DirectDraw" /v "EmulateStateBlocks" /t reg_DWORD /d "0" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Wow6432Node\Microsoft\DirectDraw" /v "EmulateStateBlocks" /t reg_DWORD /d "0" /f >> APB_Log.txt
+
+::Включает образцовый драйвер программной прорисовки графики
+reg add "HKLM\SOFTWARE\Microsoft\Direct3D\Drivers" /v "EnumReference" /t reg_DWORD /d "1" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Wow6432Node\Microsoft\Direct3D\Drivers" /v "EnumReference" /t reg_DWORD /d "1" /f >> APB_Log.txt
+
+::Включает драйвер программной прорисовки графики с использованием MMX
+reg add "HKLM\SOFTWARE\Microsoft\Direct3D\Drivers" /v "EnumSeparateMMX" /t reg_DWORD /d "1" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Wow6432Node\Microsoft\Direct3D\Drivers" /v "EnumSeparateMMX" /t reg_DWORD /d "1" /f >> APB_Log.txt
+
+::Включает драйвер программной RAMP-прорисовки
+reg add "HKLM\SOFTWARE\Microsoft\Direct3D\Drivers" /v "EnumRamp" /t reg_DWORD /d "1" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Wow6432Node\Microsoft\Direct3D\Drivers" /v "EnumRamp" /t reg_DWORD /d "1" /f >> APB_Log.txt
+
+::Включает драйвер "NULL Device"
+reg add "HKLM\SOFTWARE\Microsoft\Direct3D\Drivers" /v "EnumNullDevice" /t reg_DWORD /d "1" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Wow6432Node\Microsoft\Direct3D\Drivers" /v "EnumNullDevice" /t reg_DWORD /d "1" /f >> APB_Log.txt
+
+::Включить дополнительные библиотеки DirectX
+reg add "HKLM\SOFTWARE\Microsoft\Direct3D" /v "DisableDP2" /t reg_DWORD /d "0" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Wow6432Node\Microsoft\Direct3D" /v "DisableDP2" /t reg_DWORD /d "0" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Microsoft\Direct3D" /v "D3DXDoNotMute" /t reg_DWORD /d "1" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Wow6432Node\Microsoft\Direct3D" /v "D3DXDoNotMute" /t reg_DWORD /d "1" /f >> APB_Log.txt
+
+::Включить поддержку AGP Texturing
+reg add "HKLM\SOFTWARE\Microsoft\DirectDraw" /v "DisableAGPSupport" /t reg_DWORD /d "0" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Wow6432Node\Microsoft\DirectDraw" /v "DisableAGPSupport" /t reg_DWORD /d "0" /f >> APB_Log.txt
+timeout /t 1 /nobreak > NUL
+
 :: Disable P-States
 echo Disabling P-States
 for /f %%i in ('wmic path Win32_VideoController get PNPDeviceID^| findstr /L "PCI\VEN_"') do (
@@ -744,12 +835,58 @@ if '%choice%'=='3' goto IGPU
 :NVIDIA
 
 :: NVIDIA Inspector Profile
+mode con cols=100 lines=25
+echo.
+echo                        =================================
+echo                        =================================
+echo                       ==================================
+echo                ========.........:=======================
+echo            =========   ======:......====================
+echo         ========     ============:....:=================
+echo       ======     ======.......=====:.....===============
+echo     ========   ===========:......=====:....:============
+echo     =====   ======     ====:....=====:....==============
+echo     =======  =====     =====::======....:===============
+echo      ======   =====    ===========....:======.:=========
+echo       =======  ======  ========:....-======......:======
+echo         ======   ======:===:.....=======:.........:=====
+echo          =======    ===....::========:.........:========
+echo             =======    ==========:.........:============
+echo               =========::::..........::=================
+echo                   =====......::=========================
+echo                        =================================
+echo                        =================================                                                  
 echo Applying NVIDIA Inspector Profile
 curl -g -k -L -# -o "%temp%\nvidiaProfileInspector.zip" "https://github.com/Orbmu2k/nvidiaProfileInspector/releases/download/2.4.0.19/nvidiaProfileInspector.zip" >> APB_Log.txt
 powershell -NoProfile Expand-Archive '%temp%\nvidiaProfileInspector.zip' -DestinationPath 'C:\NvidiaProfileInspector\' >> APB_Log.txt
 curl -g -k -L -# -o "C:\NvidiaProfileInspector\ancel_nv_profile.nip" "https://github.com/ancel1x/Ancels-Performance-Batch/raw/main/bin/ancel_nv_profile.nip" >> APB_Log.txt
 start "" /wait "C:\NvidiaProfileInspector\nvidiaProfileInspector.exe" "C:\NvidiaProfileInspector\ancel_nv_profile.nip" >> APB_Log.txt
 timeout /t 3 /nobreak > NUL
+
+mode con cols=100 lines=25
+echo.
+echo     ▓▓▓                                   
+echo      ▓▓▓                                 
+echo       ▓▓                                 
+echo       ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓    ███╗   ██╗██╗   ██╗██╗██████╗ ██╗ █████╗ 
+echo       ▓▓                              ▓▓    ████╗  ██║██║   ██║██║██╔══██╗██║██╔══██╗ 
+echo       ▓▓ ▓▓▓▓▓▓▓▓▓▓▓    ▓▓▓▓▓▓▓▓▓▓▓   ▓▓    ██╔██╗ ██║██║   ██║██║██║  ██║██║███████║  
+echo       ▓▓               ▓▓▓ ▓▓  ▓▓▓▓▓█ ▓▓    ██║╚██╗██║╚██╗ ██╔╝██║██║  ██║██║██╔══██║  
+echo       ▓▓ ▓▓▓▓▓▓▓▓▓▓▓  ▓▓▓▓ ▓▓▓▓▓▓  ▓▓ ▓▓    ██║ ╚████║ ╚████╔╝ ██║██████╔╝██║██║  ██║  
+echo       ▓▓              ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ ▓▓    ╚═╝  ╚═══╝  ╚═══╝  ╚═╝╚═════╝ ╚═╝╚═╝  ╚═╝
+echo       ▓▓ ▓▓▓▓▓▓▓▓▓▓▓  ▓▓▓ ▓▓▓▓▓▓  ▓▓▓ ▓▓ 
+echo       ▓▓               ▓▓▓▓▓  ▓▓ ▓▓▓█ ▓▓ 
+echo       ▓▓ ▓▓▓▓▓▓▓▓▓▓▓    ▓▓▓▓▓▓▓▓▓▓▓   ▓▓ 
+echo       ▓▓                              ▓▓ 
+echo       ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ 
+echo       ▓▓ ▓▓ ▓▓ ▓▓         ▓▓ ▓▓          
+echo       ▓▓ ▓▓▓▓▓ ▓▓▓▓▓▓▓▓▓▓▓▓▓ ▓▓▓▓        
+echo       ▓▓                                                                       
+echo.
+echo           Using NVIDIA Tweaks...
+echo.
+timeout /t 1 /nobreak > NUL
+cls
 
 :: Enable MSI Mode for GPU
 echo Enabling MSI Mode
@@ -894,6 +1031,31 @@ timeout /t 5 /nobreak > NUL
 goto CompletedPerfOptimizations
 
 :AMD
+
+mode con cols=100 lines=25
+echo.
+echo     ▓▓▓                                   
+echo      ▓▓▓                                 
+echo       ▓▓                                 
+echo       ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓     █████╗ ███╗   ███╗██████╗  
+echo       ▓▓                              ▓▓    ██╔══██╗████╗ ████║██╔══██╗ 
+echo       ▓▓ ▓▓▓▓▓▓▓▓▓▓▓    ▓▓▓▓▓▓▓▓▓▓▓   ▓▓    ███████║██╔████╔██║██║  ██║  
+echo       ▓▓               ▓▓▓ ▓▓  ▓▓▓▓▓█ ▓▓    ██╔══██║██║╚██╔╝██║██║  ██║  
+echo       ▓▓ ▓▓▓▓▓▓▓▓▓▓▓  ▓▓▓▓ ▓▓▓▓▓▓  ▓▓ ▓▓    ██║  ██║██║ ╚═╝ ██║██████╔╝  
+echo       ▓▓              ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ ▓▓    ╚═╝  ╚═╝╚═╝     ╚═╝╚═════╝
+echo       ▓▓ ▓▓▓▓▓▓▓▓▓▓▓  ▓▓▓ ▓▓▓▓▓▓  ▓▓▓ ▓▓ 
+echo       ▓▓               ▓▓▓▓▓  ▓▓ ▓▓▓█ ▓▓ 
+echo       ▓▓ ▓▓▓▓▓▓▓▓▓▓▓    ▓▓▓▓▓▓▓▓▓▓▓   ▓▓ 
+echo       ▓▓                              ▓▓ 
+echo       ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ 
+echo       ▓▓ ▓▓ ▓▓ ▓▓         ▓▓ ▓▓          
+echo       ▓▓ ▓▓▓▓▓ ▓▓▓▓▓▓▓▓▓▓▓▓▓ ▓▓▓▓        
+echo       ▓▓                              
+echo.                                         
+echo           Using AMD Tweaks...
+echo.
+timeout /t 1 /nobreak > NUL
+cls
 
 :: Enable MSI Mode for GPU
 echo Enabling MSI Mode
@@ -1072,6 +1234,7 @@ goto CompletedPerfOptimizations
 
 :CompletedPerfOptimizations
 cls
+mode con cols=160 lines=50
 echo Completed Performance Optimizations
 timeout /t 3 /nobreak > NUL
 cls
@@ -1092,6 +1255,9 @@ echo     %w%██%y%%c%╔══%t%%w%██%y%%c%║%t%%w%██%y%%c%║╚%t
 echo     %w%██%y%%c%║%t%  %w%██%y%%c%║%t%%w%██%y%%c%║ ╚%t%%w%████%y%%c%║╚%t%%w%██████%y%%c%╗%t%%w%███████%y%%c%╗%t%%w%███████%y%%c%╗%t%%w%███████%y%%c%║%t%       %w%██%y%%c%║   ╚%t%%w%███%y%%c%╔%t%%w%███%y%%c%╔╝%t%%w%███████%y%%c%╗%t%%w%██%y%%c%║%t%  %w%██%y%%c%║%t%%w%██%y%%c%║%t%  %w%██%y%%c%╗%t%%w%███████%y%%c%╗%t%%w%██%y%%c%║%t%  %w%██%y%%c%║%t%
 echo     %c%╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝╚══════╝╚══════╝╚══════╝       ╚═╝    ╚══╝╚══╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝%t%                                                                                                                                                        
 echo                                                   %c%Created By: ancel_%t%     
+echo.
+echo                                                   %c%Modified By: Anton18-PNG%t%
+echo.
 echo                                                      %c%%u%Version: %Version%%q%%t%
 echo.
 echo %w%════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════%y%
@@ -1242,6 +1408,9 @@ echo     %w%██%y%%c%╔══%t%%w%██%y%%c%║%t%%w%██%y%%c%║╚%t
 echo     %w%██%y%%c%║%t%  %w%██%y%%c%║%t%%w%██%y%%c%║ ╚%t%%w%████%y%%c%║╚%t%%w%██████%y%%c%╗%t%%w%███████%y%%c%╗%t%%w%███████%y%%c%╗%t%%w%███████%y%%c%║%t%       %w%██%y%%c%║   ╚%t%%w%███%y%%c%╔%t%%w%███%y%%c%╔╝%t%%w%███████%y%%c%╗%t%%w%██%y%%c%║%t%  %w%██%y%%c%║%t%%w%██%y%%c%║%t%  %w%██%y%%c%╗%t%%w%███████%y%%c%╗%t%%w%██%y%%c%║%t%  %w%██%y%%c%║%t%
 echo     %c%╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝╚══════╝╚══════╝╚══════╝       ╚═╝    ╚══╝╚══╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝%t%                                                                                                                                                        
 echo                                                   %c%Created By: ancel_%t%     
+echo.
+echo                                                   %c%Modified By: Anton18-PNG%t%
+echo.
 echo                                                      %c%%u%Version: %Version%%q%%t%
 echo.
 echo %w%════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════%y%
@@ -1445,6 +1614,319 @@ sc stop diagnosticshub.standardcollector.service >> APB_Log.txt
 sc config diagnosticshub.standardcollector.service start= disabled >> APB_Log.txt
 timeout /t 1 /nobreak > NUL
 
+:: Disable Other Telemetry
+echo Disable All Telemetry
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\activity" /v "Value" /t REG_SZ /d "Deny" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\appDiagnostics" /v "Value" /t REG_SZ /d "Deny" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\appointments" /v "Value" /t REG_SZ /d "Deny" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\bluetoothSync" /v "Value" /t REG_SZ /d "Deny" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\broadFileSystemAccess" /v "Value" /t REG_SZ /d "Deny" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\cellularData" /v "Value" /t REG_SZ /d "Deny" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\cellularData\Microsoft.Win32WebViewHost_cw5n1h2txyewy" /v "Value" /t REG_SZ /d "Allow" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\chat" /v "Value" /t REG_SZ /d "Deny" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\contacts" /v "Value" /t REG_SZ /d "Deny" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\documentsLibrary" /v "Value" /t REG_SZ /d "Deny" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\email" /v "Value" /t REG_SZ /d "Deny" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\gazeInput" /v "Value" /t REG_SZ /d "Deny" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location" /v "Value" /t REG_SZ /d "Deny" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location\Microsoft.Win32WebViewHost_cw5n1h2txyewy" /v "Value" /t REG_SZ /d "Prompt" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone" /v "Value" /t REG_SZ /d "Allow" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone\Microsoft.Win32WebViewHost_cw5n1h2txyewy" /v "Value" /t REG_SZ /d "Prompt" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\phoneCall" /v "Value" /t REG_SZ /d "Deny" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\phoneCallHistory" /v "Value" /t REG_SZ /d "Deny" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\picturesLibrary" /v "Value" /t REG_SZ /d "Deny" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\radios" /v "Value" /t REG_SZ /d "Deny" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userAccountInformation" /v "Value" /t REG_SZ /d "Deny" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userAccountInformation\Microsoft.AccountsControl_cw5n1h2txyewy" /v "Value" /t REG_SZ /d "Prompt" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userDataTasks" /v "Value" /t REG_SZ /d "Deny" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userNotificationListener" /v "Value" /t REG_SZ /d "Deny" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\videosLibrary" /v "Value" /t REG_SZ /d "Deny" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam" /v "Value" /t REG_SZ /d "Allow" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam\Microsoft.Win32WebViewHost_cw5n1h2txyewy" /v "Value" /t REG_SZ /d "Allow" /f >> APB_Log.txt
+sc stop DiagTrack >> APB_Log.txt
+sc config DiagTrack start= disabled >> APB_Log.txt
+sc delete DiagTrack >> APB_Log.txt
+sc stop dmwappushservice >> APB_Log.txt
+sc config dmwappushservice start= disabled >> APB_Log.txt
+sc delete dmwappushservice >> APB_Log.txt
+set F=%TEMP%\al.reg >> APB_Log.txt
+set F2=%TEMP%\al2.reg >> APB_Log.txt
+regedit /e "%F%" "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\Autologger\AutoLogger-Diagtrack-Listener" >> APB_Log.txt
+powershell -Command "Select-String -Pattern "\"Enabled\"", "\[HKEY", "Windows\sRegistry" -Path \"%F%\" | ForEach-Object {$_.Line} | Foreach-Object {$_ -replace '\"Enabled\"=dword:00000001', '\"Enabled\"=dword:00000000'} | Out-File \"%F2%\"" >> APB_Log.txt
+regedit /s "%F2%" >> APB_Log.txt
+del "%F%" "%F2%" >> APB_Log.txt
+del "%ProgramData%\Microsoft\Diagnosis\ETLLogs\AutoLogger\*.etl" "%ProgramData%\Microsoft\Diagnosis\ETLLogs\ShutdownLogger\*.etl" >> APB_Log.txt
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\AutoLogger-Diagtrack-Listener" /v "Start" /t REG_DWORD /d 0 /f >> APB_Log.txt
+sc config diagnosticshub.standardcollector.service start= disabled >> APB_Log.txt
+schtasks /change /TN "Microsoft\Windows\Autochk\Proxy" /DISABLE >> APB_Log.txt
+schtasks /change /TN "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" /DISABLE >> APB_Log.txt
+schtasks /change /TN "Microsoft\Windows\Application Experience\ProgramDataUpdater" /DISABLE >> APB_Log.txt
+schtasks /change /TN "Microsoft\Windows\Application Experience\StartupAppTask" /DISABLE >> APB_Log.txt
+schtasks /change /TN "Microsoft\Windows\Customer Experience Improvement Program\Consolidator" /DISABLE >> APB_Log.txt
+schtasks /change /TN "Microsoft\Windows\Customer Experience Improvement Program\KernelCeipTask" /DISABLE >> APB_Log.txt
+schtasks /change /TN "Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" /DISABLE >> APB_Log.txt
+schtasks /change /TN "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticResolver" /DISABLE >> APB_Log.txt
+schtasks /change /TN "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" /DISABLE >> APB_Log.txt
+schtasks /change /TN "Microsoft\Windows\Maintenance\WinSAT" /DISABLE >> APB_Log.txt
+schtasks /change /TN "Microsoft\Windows\NetTrace\GatherNetworkInfo" /DISABLE >> APB_Log.txt
+schtasks /change /TN "Microsoft\Windows\PI\Sqm-Tasks" /DISABLE >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCortana" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\default\Experience\AllowCortana" /v "value" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "CortanaEnabled" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "CortanaEnabled" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "CanCortanaBeEnabled" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+net stop XblAuthManager >> APB_Log.txt
+sc config XblAuthManager start=disabled >> APB_Log.txt
+net stop XblGameSave >> APB_Log.txt
+sc config XblGameSave start=disabled >> APB_Log.txt
+net stop XboxNetApiSvc >> APB_Log.txt
+sc config XboxNetApiSvc start=disabled >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v AllowTelemetry /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\diagnosticshub.standardcollector.service" /v "Start" /t REG_DWORD /d 4 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Personalization\Settings" /v "AcceptedPrivacyPolicy" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SYSTEM\ControlSet001\Control\WMI\AutoLogger\AutoLogger-Diagtrack-Listener" /v "Start" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\AutoLogger-Diagtrack-Listener" /v "Start" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\SQMLogger" /v "Start" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "AITEnable" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableUAR" /t REG_DWORD /d 1 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\InputPersonalization" /v "RestrictImplicitInkCollection" /t REG_DWORD /d 1 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\InputPersonalization" /v "RestrictImplicitTextCollection" /t REG_DWORD /d 1 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\InputPersonalization\TrainedDataStore" /v "HarvestContacts" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\TabletPC" /v "PreventHandwritingDataSharing" /t REG_DWORD /d 1 /f  >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\HandwritingErrorReports" /v "PreventHandwritingErrorReports" /t REG_DWORD /d 1 reg add "HKLM\SOFTWARE\Policies\Microsoft\SQMClient\Windows" /v "CEIPEnable" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\SQMClient" /v "CorporateSQMURL" /t REG_SZ /d "0.0.0.0" /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Policies\Microsoft\Office\16.0\osm" /v "Enablelogging" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Policies\Microsoft\Office\16.0\osm" /v "EnableUpload" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\MediaPlayer\Preferences" /v "UsageTracking" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Siuf\Rules" /v "NumberOfSIUFInPeriod" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Siuf\Rules" /v "PeriodInNanoSeconds" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "DoNotShowFeedbackNotifications" /t REG_DWORD /d 1 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Policies\Microsoft\Assistance\Client\1.0" /v "NoExplicitFeedback" /t REG_DWORD /d 1 /f  >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Microsoft\Input\TIPC" /v "Enabled" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Input\TIPC" /v "Enabled" /t REG_DWORD /d 0 /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v "ShowRecent" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\FileHistory" /v "Disabled" /t REG_DWORD /d 1 /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "DeviceHistoryEnabled" /t REG_DWORD /d 0 /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy" /v "LetAppsAccessCallHistory" /t REG_DWORD /d 0 /f >> APB_Log.txt
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v " AUOptions" /t REG_DWORD /d 2 /f >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\FileHistory\File History (maintenance mode)" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\FileHistory\File History (maintenance mode)" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\AppID\SmartScreenSpecific" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\AppID\SmartScreenSpecific" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Application Experience\AitAgent" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Application Experience\AitAgent" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\FileHistory\File History (maintenance mode)" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Application Experience\ProgramDataUpdater" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Application Experience\ProgramDataUpdater" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Application Experience\StartupAppTask" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Application Experience\StartupAppTask" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Autochk\Proxy" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Autochk\Proxy" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\CloudExperienceHost\CreateObjectTask" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\CloudExperienceHost\CreateObjectTask" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Customer Experience Improvement Program\Consolidator" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Customer Experience Improvement Program\Consolidator" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Customer Experience Improvement Program\BthSQM" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Customer Experience Improvement Program\BthSQM" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Customer Experience Improvement Program\KernelCeipTask" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Customer Experience Improvement Program\KernelCeipTask" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Customer Experience Improvement Program\Uploader" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Customer Experience Improvement Program\Uploader" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticResolver" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticResolver" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\DiskFootprint\Diagnostics" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\DiskFootprint\Diagnostics" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Maintenance\WinSAT" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Maintenance\WinSAT" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\NetTrace\GatherNetworkInfo" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\NetTrace\GatherNetworkInfo" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\PI\Sqm-Tasks" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\PI\Sqm-Tasks" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Shell\FamilySafetyMonitor" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Shell\FamilySafetyMonitor" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Shell\FamilySafetyRefresh" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Shell\FamilySafetyRefresh" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Shell\FamilySafetyUpload" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Shell\FamilySafetyUpload" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Windows Error Reporting\QueueReporting" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Windows Error Reporting\QueueReporting" /disable >> APB_Log.txt
+net stop dmwappushservice  >> APB_Log.txt
+sc config dmwappushservice start=disabled >> APB_Log.txt
+net stop diagnosticshub.standardcollector.service >> APB_Log.txt
+sc config diagnosticshub.standardcollector.service start=disabled >> APB_Log.txt
+net stop DcpSvc >> APB_Log.txt
+sc config DcpSvc start=disabled >> APB_Log.txt
+net stop WerSvc >> APB_Log.txt
+sc config WerSvc start=disabled >> APB_Log.txt
+net stop PcaSvc >> APB_Log.txt
+sc config PcaSvc start=disabled >> APB_Log.txt
+net stop DoSvc >> APB_Log.txt
+sc config DoSvc start=disabled >> APB_Log.txt
+net stop WMPNetworkSvc >> APB_Log.txt
+sc config WMPNetworkSvc start=disabled >> APB_Log.txt
+net stop RemoteRegistry >> APB_Log.txt
+sc config RemoteRegistry start=disabled >> APB_Log.txt
+net stop TermService >> APB_Log.txt
+sc config TermService start=disabled >> APB_Log.txt
+net stop TrkWks >> APB_Log.txt
+sc config TrkWks start=disabled >> APB_Log.txt
+net stop DPS >> APB_Log.txt
+sc config DPS start=disabled >> APB_Log.txt
+net stop DiagTrack >> APB_Log.txt
+sc config DiagTrack start=disabled >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCortana" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\default\Experience\AllowCortana" /v "value" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "CortanaEnabled" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "CortanaEnabled" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "CanCortanaBeEnabled" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v " AUOptions" /t REG_DWORD /d 2 /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "DeviceHistoryEnabled" /t REG_DWORD /d 0 /f >> APB_Log.txt
+net stop XblAuthManager >> APB_Log.txt
+sc config XblAuthManager start=disabled >> APB_Log.txt
+net stop XblGameSave >> APB_Log.txt
+sc config XblGameSave start=disabled >> APB_Log.txt
+net stop XboxNetApiSvc >> APB_Log.txt
+sc config XboxNetApiSvc start=disabled >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy" /v "LetAppsAccessCallHistory" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+net stop RemoteRegistry >> APB_Log.txt
+sc config RemoteRegistry start=disabled >> APB_Log.txt
+net stop TermService >> APB_Log.txt
+sc config TermService start=disabled >> APB_Log.txt
+net stop TrkWks >> APB_Log.txt
+sc config TrkWks start=disabled >> APB_Log.txt
+net stop DPS >> APB_Log.txt
+sc config DPS start=disabled >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v "ShowRecent" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\FileHistory" /v "Disabled" /t REG_DWORD /d 1 /f >> APB_Log.txt
+net stop DiagTrack >> APB_Log.txt
+sc config DiagTrack start=disabled >> APB_Log.txt
+net stop dmwappushservice  >> APB_Log.txt
+sc config dmwappushservice start=disabled >> APB_Log.txt
+net stop diagnosticshub.standardcollector.service >> APB_Log.txt
+sc config diagnosticshub.standardcollector.service start=disabled >> APB_Log.txt
+net stop DcpSvc >> APB_Log.txt
+sc config DcpSvc start=disabled >> APB_Log.txt
+net stop WerSvc >> APB_Log.txt
+sc config WerSvc start=disabled >> APB_Log.txt
+net stop PcaSvc >> APB_Log.txt
+sc config PcaSvc start=disabled >> APB_Log.txt
+net stop DoSvc >> APB_Log.txt
+sc config DoSvc start=disabled >> APB_Log.txt
+net stop WMPNetworkSvc >> APB_Log.txt
+sc config WMPNetworkSvc start=disabled >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v AllowTelemetry /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\diagnosticshub.standardcollector.service" /v "Start" /t REG_DWORD /d 4 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Personalization\Settings" /v "AcceptedPrivacyPolicy" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SYSTEM\ControlSet001\Control\WMI\AutoLogger\AutoLogger-Diagtrack-Listener" /v "Start" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\AutoLogger-Diagtrack-Listener" /v "Start" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\SQMLogger" /v "Start" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "AITEnable" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableUAR" /t REG_DWORD /d 1 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\InputPersonalization" /v "RestrictImplicitInkCollection" /t REG_DWORD /d 1 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\InputPersonalization" /v "RestrictImplicitTextCollection" /t REG_DWORD /d 1 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\InputPersonalization\TrainedDataStore" /v "HarvestContacts" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\TabletPC" /v "PreventHandwritingDataSharing" /t REG_DWORD /d 1 /f  >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\HandwritingErrorReports" /v "PreventHandwritingErrorReports" /t REG_DWORD /d 1 reg add "HKLM\SOFTWARE\Policies\Microsoft\SQMClient\Windows" /v "CEIPEnable" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\SQMClient" /v "CorporateSQMURL" /t REG_SZ /d "0.0.0.0" /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Policies\Microsoft\Office\16.0\osm" /v "Enablelogging" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Policies\Microsoft\Office\16.0\osm" /v "EnableUpload" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\MediaPlayer\Preferences" /v "UsageTracking" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Siuf\Rules" /v "NumberOfSIUFInPeriod" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Siuf\Rules" /v "PeriodInNanoSeconds" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "DoNotShowFeedbackNotifications" /t REG_DWORD /d 1 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Policies\Microsoft\Assistance\Client\1.0" /v "NoExplicitFeedback" /t REG_DWORD /d 1 /f  >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Microsoft\Input\TIPC" /v "Enabled" /t REG_DWORD /d 0 /f  >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Microsoft\Input\TIPC" /v "Enabled" /t REG_DWORD /d 0 /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "NoDriveTypeAutoRun" /t REG_DWORD /d 255 /f  >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "NoAutorun" /t REG_DWORD /d 1 /f  >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\FileHistory\File History (maintenance mode)" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\FileHistory\File History (maintenance mode)" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\AppID\SmartScreenSpecific" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\AppID\SmartScreenSpecific" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Application Experience\AitAgent" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Application Experience\AitAgent" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\FileHistory\File History (maintenance mode)" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Application Experience\ProgramDataUpdater" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Application Experience\ProgramDataUpdater" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Application Experience\StartupAppTask" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Application Experience\StartupAppTask" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Autochk\Proxy" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Autochk\Proxy" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\CloudExperienceHost\CreateObjectTask" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\CloudExperienceHost\CreateObjectTask" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Customer Experience Improvement Program\Consolidator" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Customer Experience Improvement Program\Consolidator" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Customer Experience Improvement Program\BthSQM" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Customer Experience Improvement Program\BthSQM" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Customer Experience Improvement Program\KernelCeipTask" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Customer Experience Improvement Program\KernelCeipTask" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Customer Experience Improvement Program\Uploader" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Customer Experience Improvement Program\Uploader" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticResolver" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticResolver" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\DiskFootprint\Diagnostics" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\DiskFootprint\Diagnostics" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Maintenance\WinSAT" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Maintenance\WinSAT" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\NetTrace\GatherNetworkInfo" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\NetTrace\GatherNetworkInfo" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\PI\Sqm-Tasks" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\PI\Sqm-Tasks" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Shell\FamilySafetyMonitor" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Shell\FamilySafetyMonitor" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Shell\FamilySafetyRefresh" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Shell\FamilySafetyRefresh" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Shell\FamilySafetyUpload" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Shell\FamilySafetyUpload" /disable >> APB_Log.txt
+schtasks /end /tn "\Microsoft\Windows\Windows Error Reporting\QueueReporting" >> APB_Log.txt
+schtasks /change /tn "\Microsoft\Windows\Windows Error Reporting\QueueReporting" /disable >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Reporting" /v "DisableGenericReports" /t REG_DWORD /d "1" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet" /v "LocalSettingOverrideSpynetReporting" /t REG_DWORD /d "0" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet" /v "SpynetReporting" /t REG_DWORD /d "0" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet" /v "SubmitSamplesConsent" /t REG_DWORD /d "2" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\SmartScreen" /v "ConfigureAppInstallControlEnabled" /t REG_DWORD /d "0" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Threats" /v "Threats_ThreatSeverityDefaultAction" /t REG_DWORD /d "1" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Threats\ThreatSeverityDefaultAction" /v "1" /t REG_SZ /d "6" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Threats\ThreatSeverityDefaultAction" /v "2" /t REG_SZ /d "6" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Threats\ThreatSeverityDefaultAction" /v "4" /t REG_SZ /d "6" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Threats\ThreatSeverityDefaultAction" /v "5" /t REG_SZ /d "6" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\UX Configuration" /v "Notification_Suppress" /t REG_DWORD /d "1" /f >> APB_Log.txt
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Sense" /v "Start" /t REG_DWORD /d "4" /f >> APB_Log.txt
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\WdNisSvc" /v "Start" /t REG_DWORD /d "4" /f >> APB_Log.txt
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\WinDefend" /v "Start" /t REG_DWORD /d "4" /f >> APB_Log.txt
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\SecurityHealthService" /v "Start" /t REG_DWORD /d "4" /f >> APB_Log.txt
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\wscsvc" /v "Start" /t REG_DWORD /d "4" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /v "DisableAntiSpyware" /t REG_DWORD /d "1" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /v "DisableRoutinelyTakingAction" /t REG_DWORD /d "1" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /v "ServiceKeepAlive" /t REG_DWORD /d "0" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableBehaviorMonitoring" /t REG_DWORD /d "1" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableIOAVProtection" /t REG_DWORD /d "1" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableOnAccessProtection" /t REG_DWORD /d "1" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableRealtimeMonitoring" /t REG_DWORD /d "1" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Reporting" /v "DisableEnhancedNotifications" /t REG_DWORD /d "1" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications" /v "DisableNotifications" /t REG_DWORD /d "1" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications" /v "NoToastApplicationNotification" /t REG_DWORD /d "1" /f >> APB_Log.txt
+reg add "HKCU\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications" /v "NoToastApplicationNotificationOnLockScreen" /t REG_DWORD /d "1" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\MsMpEng.exe\PerfOptions" /v "CpuPriorityClass" /t REG_DWORD /d "1" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\MsMpEngCP.exe\PerfOptions" /v "CpuPriorityClass" /t REG_DWORD /d "1" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /v "DontReportInfectionInformation" /t REG_DWORD /d "1" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v "EnableSmartScreen" /t REG_DWORD /d "0" /f >> APB_Log.txt
+reg add "HKLM\SOFTWARE\Policies\Microsoft\MicrosoftEdge\PhishingFilter" /v "EnabledV9" /t REG_DWORD /d "0" /f
+
 goto CompletedTelemetryOptimizations
 
 :CompletedTelemetryOptimizations
@@ -1469,6 +1951,9 @@ echo     %w%██%y%%c%╔══%t%%w%██%y%%c%║%t%%w%██%y%%c%║╚%t
 echo     %w%██%y%%c%║%t%  %w%██%y%%c%║%t%%w%██%y%%c%║ ╚%t%%w%████%y%%c%║╚%t%%w%██████%y%%c%╗%t%%w%███████%y%%c%╗%t%%w%███████%y%%c%╗%t%%w%███████%y%%c%║%t%       %w%██%y%%c%║   ╚%t%%w%███%y%%c%╔%t%%w%███%y%%c%╔╝%t%%w%███████%y%%c%╗%t%%w%██%y%%c%║%t%  %w%██%y%%c%║%t%%w%██%y%%c%║%t%  %w%██%y%%c%╗%t%%w%███████%y%%c%╗%t%%w%██%y%%c%║%t%  %w%██%y%%c%║%t%
 echo     %c%╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝╚══════╝╚══════╝╚══════╝       ╚═╝    ╚══╝╚══╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝%t%                                                                                                                                                        
 echo                                                   %c%Created By: ancel_%t%     
+echo.
+echo                                                   %c%Modified By: Anton18-PNG%t%
+echo.
 echo                                                      %c%%u%Version: %Version%%q%%t%
 echo.
 echo %w%════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════%y%
@@ -1887,6 +2372,9 @@ echo     %w%██%y%%c%╔══%t%%w%██%y%%c%║%t%%w%██%y%%c%║╚%t
 echo     %w%██%y%%c%║%t%  %w%██%y%%c%║%t%%w%██%y%%c%║ ╚%t%%w%████%y%%c%║╚%t%%w%██████%y%%c%╗%t%%w%███████%y%%c%╗%t%%w%███████%y%%c%╗%t%%w%███████%y%%c%║%t%       %w%██%y%%c%║   ╚%t%%w%███%y%%c%╔%t%%w%███%y%%c%╔╝%t%%w%███████%y%%c%╗%t%%w%██%y%%c%║%t%  %w%██%y%%c%║%t%%w%██%y%%c%║%t%  %w%██%y%%c%╗%t%%w%███████%y%%c%╗%t%%w%██%y%%c%║%t%  %w%██%y%%c%║%t%
 echo     %c%╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝╚══════╝╚══════╝╚══════╝       ╚═╝    ╚══╝╚══╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝%t%                                                                                                                                                        
 echo                                                   %c%Created By: ancel_%t%     
+echo.
+echo                                                   %c%Modified By: Anton18-PNG%t%
+echo.
 echo                                                      %c%%u%Version: %Version%%q%%t%
 echo.
 echo %w%════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════%y%
@@ -1924,7 +2412,10 @@ echo     %w%███████%y%%c%║%t%%w%██%y%%c%╔%t%%w%██%y%%c
 echo     %w%██%y%%c%╔══%t%%w%██%y%%c%║%t%%w%██%y%%c%║╚%t%%w%██%y%%c%╗%t%%w%██%y%%c%║%t%%w%██%y%%c%║%t%     %w%██%y%%c%╔══╝%t%  %w%██%y%%c%║     ╚════%t%%w%██%y%%c%║%t%       %w%██%y%%c%║%t%   %w%██%y%%c%║%t%%w%███%y%%c%╗%t%%w%██%y%%c%║%t%%w%██%y%%c%╔══╝%t%  %w%██%y%%c%╔══%t%%w%██%y%%c%║%t%%w%██%y%%c%╔═%t%%w%██%y%%c%╗%t% %w%██%y%%c%╔══╝%t%  %w%██%y%%c%╔══%t%%w%██%y%%c%╗%t%
 echo     %w%██%y%%c%║%t%  %w%██%y%%c%║%t%%w%██%y%%c%║ ╚%t%%w%████%y%%c%║╚%t%%w%██████%y%%c%╗%t%%w%███████%y%%c%╗%t%%w%███████%y%%c%╗%t%%w%███████%y%%c%║%t%       %w%██%y%%c%║   ╚%t%%w%███%y%%c%╔%t%%w%███%y%%c%╔╝%t%%w%███████%y%%c%╗%t%%w%██%y%%c%║%t%  %w%██%y%%c%║%t%%w%██%y%%c%║%t%  %w%██%y%%c%╗%t%%w%███████%y%%c%╗%t%%w%██%y%%c%║%t%  %w%██%y%%c%║%t%
 echo     %c%╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝╚══════╝╚══════╝╚══════╝       ╚═╝    ╚══╝╚══╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝%t%                                                                                                                                                        
-echo                                                   %c%Created By: ancel_%t%     
+echo                                                   %c%Created By: ancel_%t%    
+echo.
+echo                                                   %c%Modified By: Anton18-PNG%t%
+echo. 
 echo                                                      %c%%u%Version: %Version%%q%%t%
 echo.
 echo %w%════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════%y%
@@ -2154,6 +2645,9 @@ echo     %w%██%y%%c%╔══%t%%w%██%y%%c%║%t%%w%██%y%%c%║╚%t
 echo     %w%██%y%%c%║%t%  %w%██%y%%c%║%t%%w%██%y%%c%║ ╚%t%%w%████%y%%c%║╚%t%%w%██████%y%%c%╗%t%%w%███████%y%%c%╗%t%%w%███████%y%%c%╗%t%%w%███████%y%%c%║%t%       %w%██%y%%c%║   ╚%t%%w%███%y%%c%╔%t%%w%███%y%%c%╔╝%t%%w%███████%y%%c%╗%t%%w%██%y%%c%║%t%  %w%██%y%%c%║%t%%w%██%y%%c%║%t%  %w%██%y%%c%╗%t%%w%███████%y%%c%╗%t%%w%██%y%%c%║%t%  %w%██%y%%c%║%t%
 echo     %c%╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝╚══════╝╚══════╝╚══════╝       ╚═╝    ╚══╝╚══╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝%t%                                                                                                                                                        
 echo                                                   %c%Created By: ancel_%t%     
+echo.
+echo                                                   %c%Modified By: Anton18-PNG%t%
+echo.
 echo                                                      %c%%u%Version: %Version%%q%%t%
 echo.
 echo %w%════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════%y%
@@ -2243,26 +2737,19 @@ if '%choice%'=='2' goto AncelsExperimentalPowerPlan
 cls
 echo Applying Ancels Power Plan
 :: Import Ancels Power Plan
+Reg.exe add "HKCR\.pow" /ve /t REG_SZ /d "Power Plan" /f >> APB_Log.txt
+Reg.exe add "HKCR\.pow" /v "FriendlyTypeName" /t REG_SZ /d "Power Plan" /f >> APB_Log.txt
+Reg.exe add "HKCR\.pow\DefaultIcon" /ve /t REG_EXPAND_SZ /d "%%SystemRoot%%\System32\powercfg.cpl,-202" /f >> APB_Log.txt
+Reg.exe add "HKCR\.pow\shell\Import\command" /ve /t REG_SZ /d "powercfg /import \"%%1\"" /f >> APB_Log.txt
+Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\0cc5b647-c1df-4637-891a-dec35c318583" /v "Attributes" /t REG_DWORD /d "0" /f >> APB_Log.txt
+Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\3b04d4fd-1cc7-4f23-ab1c-d1337819c4bb" /v "Attributes" /t REG_DWORD /d "0" /f >> APB_Log.txt
+Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\5d76a2ca-e8c0-402f-a133-2158492d58ad" /v "Attributes" /t REG_DWORD /d "0" /f >> APB_Log.txt
+Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\a55612aa-f624-42c6-a443-7397d064c04f" /v "Attributes" /t REG_DWORD /d "0" /f >> APB_Log.txt
+Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\ea062031-0e34-4ff1-9b6d-eb1059334028" /v "Attributes" /t REG_DWORD /d "0" /f >> APB_Log.txt
+Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\ImmersiveShell" /v "UseWin32BatteryFlyout" /t REG_DWORD /d "1" /f
 curl -g -k -L -# -o "C:\Ancels Power Plan.pow" "https://github.com/ancel1x/Ancels-Performance-Batch/raw/main/bin/Ancels_Power_Plan.pow" >> APB_Log.txt
 powercfg -import "C:\Ancels Power Plan.pow" 11111111-1111-1111-1111-111111111111 >> APB_Log.txt
 powercfg -setactive 11111111-1111-1111-1111-111111111111 >> APB_Log.txt
-timeout /t 3 /nobreak > NUL
-
-echo Deleting other Power Plans
-:: Delete Balanced Power Plan
-powercfg -delete 381b4222-f694-41f0-9685-ff5bb260df2e >> APB_Log.txt
-
-:: Delete Power Saver Power Plan
-powercfg -delete a1841308-3541-4fab-bc81-f71556f20b4a >> APB_Log.txt
-
-:: Delete High Performance Power Plan
-powercfg -delete 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c >> APB_Log.txt
-
-:: Delete Ultimate Performance Power Plan
-powercfg -delete e9a42b02-d5df-448d-aa00-03f14749eb61 >> APB_Log.txt
-
-:: Delete AMD Ryzen Balanced Power Plan
-powercfg -delete 9897998c-92de-4669-853f-b7cd3ecb2790 >> APB_Log.txt
 timeout /t 3 /nobreak > NUL
 
 goto Other
@@ -2271,26 +2758,19 @@ goto Other
 cls
 echo Applying Ancels Power Plan
 :: Import Ancels Power Plan
+Reg.exe add "HKCR\.pow" /ve /t REG_SZ /d "Power Plan" /f >> APB_Log.txt
+Reg.exe add "HKCR\.pow" /v "FriendlyTypeName" /t REG_SZ /d "Power Plan" /f >> APB_Log.txt
+Reg.exe add "HKCR\.pow\DefaultIcon" /ve /t REG_EXPAND_SZ /d "%%SystemRoot%%\System32\powercfg.cpl,-202" /f >> APB_Log.txt
+Reg.exe add "HKCR\.pow\shell\Import\command" /ve /t REG_SZ /d "powercfg /import \"%%1\"" /f >> APB_Log.txt
+Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\0cc5b647-c1df-4637-891a-dec35c318583" /v "Attributes" /t REG_DWORD /d "0" /f >> APB_Log.txt
+Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\3b04d4fd-1cc7-4f23-ab1c-d1337819c4bb" /v "Attributes" /t REG_DWORD /d "0" /f >> APB_Log.txt
+Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\5d76a2ca-e8c0-402f-a133-2158492d58ad" /v "Attributes" /t REG_DWORD /d "0" /f >> APB_Log.txt
+Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\a55612aa-f624-42c6-a443-7397d064c04f" /v "Attributes" /t REG_DWORD /d "0" /f >> APB_Log.txt
+Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\ea062031-0e34-4ff1-9b6d-eb1059334028" /v "Attributes" /t REG_DWORD /d "0" /f >> APB_Log.txt
+Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\ImmersiveShell" /v "UseWin32BatteryFlyout" /t REG_DWORD /d "1" /f
 curl -g -k -L -# -o "C:\Ancels Experimental Power Plan.pow" "https://github.com/ancel1x/Ancels-Performance-Batch/raw/main/bin/Ancels_Experimental_Power_Plan.pow" >> APB_Log.txt
 powercfg -import "C:\Ancels Experimental Power Plan.pow" 22222222-2222-2222-2222-222222222222 >> APB_Log.txt
 powercfg -setactive 22222222-2222-2222-2222-222222222222 >> APB_Log.txt
-timeout /t 3 /nobreak > NUL
-
-echo Deleting other Power Plans
-:: Delete Balanced Power Plan
-powercfg -delete 381b4222-f694-41f0-9685-ff5bb260df2e >> APB_Log.txt
-
-:: Delete Power Saver Power Plan
-powercfg -delete a1841308-3541-4fab-bc81-f71556f20b4a >> APB_Log.txt
-
-:: Delete High Performance Power Plan
-powercfg -delete 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c >> APB_Log.txt
-
-:: Delete Ultimate Performance Power Plan
-powercfg -delete e9a42b02-d5df-448d-aa00-03f14749eb61 >> APB_Log.txt
-
-:: Delete AMD Ryzen Balanced Power Plan
-powercfg -delete 9897998c-92de-4669-853f-b7cd3ecb2790 >> APB_Log.txt
 timeout /t 3 /nobreak > NUL
 
 goto Other
